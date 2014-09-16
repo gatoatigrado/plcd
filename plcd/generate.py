@@ -140,6 +140,15 @@ def main(args=None):
     if not options.input_type:
         cmd_args.error("You need to specify an input type (e.g. --input-lines)")
 
+    if not options.name:
+        should_continue = raw_input(
+            "WARNING: You did not provide a name. It's recommended that "
+            "you set a name to tag any compressed data with (since compressed "
+            "data is only de-compressible when you know the schema). Continue? "
+        )
+        if not should_continue.lower().strip().startswith('y'):
+            return
+
     if options.input_type == "lines":
         data = tuple(fileinput.input(files=args, openhook=fileinput.hook_compressed))
 

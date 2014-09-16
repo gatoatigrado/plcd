@@ -49,9 +49,25 @@ It really depends on your data. If your data is highly redundant, maybe
 datasets, try it on yours:
 
     pip install git+https://github.com/gatoatigrado/plcd
-    plcd_generate --line-separated my_data.json
+    plcd_generate --input-lines my_data.json
 
 (That assumes you have newline-separated data; use
 `plcd_generate --help` for more options.)
+
+If you prefer not to install it yet, you can run it like this,
+
+    tox -e devenv -- plcd_generate --input-lines my_data.json
+
+By default, this will choose 3 representative lines, on which the rest
+of the data (excluding these three lines) compresses the best. This will
+print something like
+
+    INFO:root:Best ratio: 5.739488117
+    {"base_compressor": "zlib", "name": null, "base_compressor_settings": {"level": null}, "preloaded_compressed_base64": "eJykVV1r60Y..."}
+
+to the command line; the first line gives the compression ratio, and the
+second is a description of the compressor that you can load up
+(currently via `plcd.scheme.ZlibPlcdScheme.from_json_description_dict()`
+... helper functions may be added later).
 
   [this Wikipedia article]: http://en.wikibooks.org/wiki/Data_Compression/Inference_Compression#pre-loaded_dictionary
