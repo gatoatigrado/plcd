@@ -23,6 +23,11 @@ setup(
     ],
     install_requires=[],
     packages=find_packages(exclude=['tests*']),
+    entry_points={
+        'console_scripts': [
+            'plcd_generate = plcd.generate:main',
+        ],
+    },
     long_description="""Facilitates use of pre-loaded compression dictionaries.
 
 Pre-loaded compression means that you "seed" a compressor with some

@@ -4,6 +4,7 @@ Tests some really basic stuff
 """
 from __future__ import absolute_import
 from __future__ import print_function
+
 import json
 import zlib
 import pytest
@@ -42,3 +43,18 @@ def test_raises_if_bad_tag():
     scheme = ZlibPlcdScheme('x_v1', '')
     with pytest.raises(ValueError):
         scheme.decompress('')
+
+
+def test_scheme_serialization_basic():
+    preload, test_input = map(_stable_json_dump, [
+        {'a': 123, 'b': 44, 'c': 92},
+        {'a': 42, 'b': 44, 'c': 91},
+    ])
+    scheme = ZlibPlcdScheme('x_v1', preload)
+
+    scheme_reconstructed = ZlibPlcdScheme.from_json_description_dict(
+        scheme.json_description_dict()
+    )
+
+    assert len(scheme.compress(test_input)) == 20
+    assert scheme_reconstructed.compress(test_input) == scheme.compress(test_input)
